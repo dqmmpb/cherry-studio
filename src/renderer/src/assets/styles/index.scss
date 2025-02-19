@@ -1,8 +1,8 @@
-@import './markdown.scss';
-@import './ant.scss';
-@import './scrollbar.scss';
-@import '../fonts/icon-fonts/iconfont.css';
-@import '../fonts/ubuntu/ubuntu.css';
+@use './markdown.scss';
+@use './ant.scss';
+@use './scrollbar.scss';
+@use '../fonts/icon-fonts/iconfont.css';
+@use '../fonts/ubuntu/ubuntu.css';
 
 :root {
   --color-white: #ffffff;
