@@ -196,8 +196,8 @@ export function getModelLogo(modelId: string) {
     glm: isLight ? ChatGLMModelLogo : ChatGLMModelLogoDark,
     deepseek: isLight ? DeepSeekModelLogo : DeepSeekModelLogoDark,
     qwen: isLight ? QwenModelLogo : QwenModelLogoDark,
-    "qwq-": isLight ? QwenModelLogo : QwenModelLogoDark,
-    "qvq-": isLight ? QwenModelLogo : QwenModelLogoDark,
+    'qwq-': isLight ? QwenModelLogo : QwenModelLogoDark,
+    'qvq-': isLight ? QwenModelLogo : QwenModelLogoDark,
     Omni: isLight ? QwenModelLogo : QwenModelLogoDark,
     gemma: isLight ? GemmaModelLogo : GemmaModelLogoDark,
     'yi-': isLight ? YiModelLogo : YiModelLogoDark,
@@ -1604,6 +1604,10 @@ export function isEmbeddingModel(model: Model): boolean {
     return false
   }
 
+  if (model.provider === 'doubao') {
+    return EMBEDDING_REGEX.test(model.name)
+  }
+
   return EMBEDDING_REGEX.test(model.id) || model.type?.includes('embedding') || false
 }
 
@@ -1612,12 +1616,20 @@ export function isVisionModel(model: Model): boolean {
     return false
   }
 
+  if (model.provider === 'doubao') {
+    return VISION_REGEX.test(model.name) || model.type?.includes('vision') || false
+  }
+
   return VISION_REGEX.test(model.id) || model.type?.includes('vision') || false
 }
 
 export function isReasoningModel(model: Model): boolean {
   if (!model) {
     return false
+  }
+
+  if (model.provider === 'doubao') {
+    return REASONING_REGEX.test(model.name) || model.type?.includes('reasoning') || false
   }
 
   return REASONING_REGEX.test(model.id) || model.type?.includes('reasoning') || false
@@ -1671,10 +1683,15 @@ export function isWebSearchModel(model: Model): boolean {
   if (provider.id === 'zhipu') {
     return model?.id?.startsWith('glm-4-')
   }
+
   if (provider.id === 'dashscope') {
     const models = ['qwen-turbo', 'qwen-max', 'qwen-plus']
     // matches id like qwen-max-0919, qwen-max-latest
     return models.some((i) => model.id.startsWith(i))
+  }
+
+  if (provider.id === 'openrouter') {
+    return true
   }
 
   return false
@@ -1688,6 +1705,7 @@ export function getOpenAIWebSearchParams(assistant: Assistant, model: Model): Re
       if (model.provider === 'hunyuan') {
         return { enable_enhancement: true }
       }
+
       if (model.provider === 'dashscope') {
         return {
           enable_search: true,
@@ -1696,6 +1714,13 @@ export function getOpenAIWebSearchParams(assistant: Assistant, model: Model): Re
           }
         }
       }
+
+      if (model.provider === 'openrouter') {
+        return {
+          plugins: [{ id: 'web' }]
+        }
+      }
+
       return {
         tools: webSearchTools
       }
