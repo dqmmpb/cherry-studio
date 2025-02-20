@@ -21,7 +21,7 @@ const InputBar: FC<InputBarProps> = ({ text, model, placeholder, handleKeyDown, 
       <Input
         value={text}
         placeholder={placeholder}
-        bordered={false}
+        variant="borderless"
         autoFocus
         onKeyDown={handleKeyDown}
         onChange={handleChange}

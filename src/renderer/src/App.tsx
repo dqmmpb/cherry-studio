@@ -1,5 +1,7 @@
 import '@renderer/databases'
 
+import isPropValid from '@emotion/is-prop-valid';
+import { StyleSheetManager } from 'styled-components';
 import store, { persistor } from '@renderer/store'
 import { Provider } from 'react-redux'
 import { HashRouter, Route, Routes } from 'react-router-dom'
@@ -21,31 +23,35 @@ import TranslatePage from './pages/translate/TranslatePage'
 
 function App(): JSX.Element {
   return (
-    <Provider store={store}>
-      <ThemeProvider>
-        <AntdProvider>
-          <SyntaxHighlighterProvider>
-            <PersistGate loading={null} persistor={persistor}>
-              <TopViewContainer>
-                <HashRouter>
-                  <Sidebar />
-                  <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/agents" element={<AgentsPage />} />
-                    <Route path="/paintings" element={<PaintingsPage />} />
-                    <Route path="/translate" element={<TranslatePage />} />
-                    <Route path="/files" element={<FilesPage />} />
-                    <Route path="/knowledge" element={<KnowledgePage />} />
-                    <Route path="/apps" element={<AppsPage />} />
-                    <Route path="/settings/*" element={<SettingsPage />} />
-                  </Routes>
-                </HashRouter>
-              </TopViewContainer>
-            </PersistGate>
-          </SyntaxHighlighterProvider>
-        </AntdProvider>
-      </ThemeProvider>
-    </Provider>
+    <StyleSheetManager shouldForwardProp={(propName, elementToBeCreated) => {
+      return typeof elementToBeCreated === 'string' ? isPropValid(propName) : true;
+    }}>
+      <Provider store={store}>
+        <ThemeProvider>
+          <AntdProvider>
+            <SyntaxHighlighterProvider>
+              <PersistGate loading={null} persistor={persistor}>
+                <TopViewContainer>
+                  <HashRouter>
+                    <Sidebar />
+                    <Routes>
+                      <Route path="/" element={<HomePage />} />
+                      <Route path="/agents" element={<AgentsPage />} />
+                      <Route path="/paintings" element={<PaintingsPage />} />
+                      <Route path="/translate" element={<TranslatePage />} />
+                      <Route path="/files" element={<FilesPage />} />
+                      <Route path="/knowledge" element={<KnowledgePage />} />
+                      <Route path="/apps" element={<AppsPage />} />
+                      <Route path="/settings/*" element={<SettingsPage />} />
+                    </Routes>
+                  </HashRouter>
+                </TopViewContainer>
+              </PersistGate>
+            </SyntaxHighlighterProvider>
+          </AntdProvider>
+        </ThemeProvider>
+      </Provider>
+    </StyleSheetManager>
   )
 }
 

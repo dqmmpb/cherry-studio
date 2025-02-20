@@ -208,7 +208,7 @@ const PopupContainer: React.FC<PopupContainerProps> = ({ model, resolve }) => {
           allowClear
           autoFocus
           style={{ paddingLeft: 0 }}
-          bordered={false}
+          variant="borderless"
           size="middle"
         />
       </HStack>
